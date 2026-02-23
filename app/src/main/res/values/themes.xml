@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.AppTheme" parent="android:Theme.Material">
+        <item name="android:windowBackground">@color/mariners_navy_blue</item>
+        <item name="android:colorBackground">@color/mariners_navy_blue</item>
+        <item name="android:colorForeground">@color/white</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:statusBarColor">@color/mariners_navy_blue</item>
+    </style>
+</resources>
