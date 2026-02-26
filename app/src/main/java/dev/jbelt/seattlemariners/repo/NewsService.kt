@@ -8,4 +8,5 @@ import retrofit2.http.Path
 interface NewsService {
     @GET("{id}")
     suspend fun getArticle(@Path("id") id: Long): HeadlinesResponse
+
 }

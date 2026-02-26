@@ -9,7 +9,7 @@ import javax.inject.Singleton
 
 @Singleton
 object StatsInstance{
-    private const val BASE_URL = "https://statsapi.mlb.com/api/v1/"
+    private const val BASE_URL = "https://statsapi.mlb.com/"
 
     val moshi: Moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 

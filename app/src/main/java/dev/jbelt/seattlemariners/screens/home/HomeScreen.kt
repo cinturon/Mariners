@@ -78,36 +78,25 @@ fun HomeScreen(
                         modifier = Modifier.padding(8.dp)
                     )
                 }
+            }
 
-                IconButton(
-                    onClick = { statsViewModel.refreshGame() },
-                    enabled = !isLoading,
-                    modifier = Modifier.padding(start = 8.dp)
-                ) {
-                    if (isLoading) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.padding(8.dp),
-                            color = Color(0xFF00C8C8),
-                            strokeWidth = 2.dp
-                        )
-                    } else {
-                        Icon(
-                            imageVector = Icons.Filled.Refresh,
-                            contentDescription = "Refresh",
-                            tint = Color(0xFF00C8C8)
+            game?.let {
+                GameCard(game = it)
+            }
+        }
+        if (game?.status?.detailedState == "In Progress") {
+            // Live Game Card - shows current play when game is in progress
+            item {
+                game.let { currentGame ->
+                    currentGame.gamePk?.let { gamePk ->
+                        LiveGameCard(
+                            gamePk = gamePk,
+                            modifier = Modifier.fillMaxWidth()
                         )
                     }
                 }
             }
         }
-
-        // GameCard
-        item {
-            game?.let {
-                GameCard(game = it)
-            }
-        }
-
         // Upcoming Games Section Title
         item {
             Card(
@@ -162,4 +151,3 @@ fun HomeScreen(
         }
     }
 }
-

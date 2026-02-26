@@ -6,35 +6,35 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class NewsResponse(
     @Json(name = "header")
-    val header: String,
+    val header: String? = null,
     @Json(name = "link")
-    val link: NewsLink,
+    val link: NewsLink? = null,
     @Json(name = "articles")
-    val articles: List<Article>
+    val articles: List<Article>? = null
 )
 
 @JsonClass(generateAdapter = true)
 data class NewsLink(
     @Json(name = "language")
-    val language: String,
+    val language: String? = null,
     @Json(name = "rel")
-    val rel: List<String>,
+    val rel: List<String>? = null,
     @Json(name = "href")
-    val href: String,
+    val href: String? = null,
     @Json(name = "text")
-    val text: String,
+    val text: String? = null,
     @Json(name = "shortText")
-    val shortText: String,
+    val shortText: String? = null,
     @Json(name = "isExternal")
-    val isExternal: Boolean,
+    val isExternal: Boolean? = null,
     @Json(name = "isPremium")
-    val isPremium: Boolean
+    val isPremium: Boolean? = null
 )
 
 @JsonClass(generateAdapter = true)
 data class Article(
     @Json(name = "id")
-    val id: Long,
+    val id: Long? = null,
     @Json(name = "nowId")
     val nowId: String? = null,
     @Json(name = "contentKey")
@@ -42,15 +42,15 @@ data class Article(
     @Json(name = "dataSourceIdentifier")
     val dataSourceIdentifier: String? = null,
     @Json(name = "type")
-    val type: String,
+    val type: String? = null,
     @Json(name = "headline")
-    val headline: String,
+    val headline: String? = null,
     @Json(name = "description")
-    val description: String,
+    val description: String? = null,
     @Json(name = "lastModified")
-    val lastModified: String,
+    val lastModified: String? = null,
     @Json(name = "published")
-    val published: String,
+    val published: String? = null,
     @Json(name = "images")
     val images: List<ArticleImage>? = null,
     @Json(name = "video")
@@ -58,9 +58,9 @@ data class Article(
     @Json(name = "categories")
     val categories: List<Category>? = null,
     @Json(name = "premium")
-    val premium: Boolean,
+    val premium: Boolean? = null,
     @Json(name = "links")
-    val links: ArticleLinks,
+    val links: ArticleLinks? = null,
     @Json(name = "byline")
     val byline: String? = null
 )
@@ -70,11 +70,11 @@ data class ArticleImage(
     @Json(name = "dataSourceIdentifier")
     val dataSourceIdentifier: String? = null,
     @Json(name = "id")
-    val id: Long? = null,
+    val id: Int? = null,
     @Json(name = "type")
     val type: String? = null,
     @Json(name = "name")
-    val name: String,
+    val name: String? = null,
     @Json(name = "caption")
     val caption: String? = null,
     @Json(name = "alt")
@@ -82,11 +82,11 @@ data class ArticleImage(
     @Json(name = "credit")
     val credit: String? = null,
     @Json(name = "height")
-    val height: Int,
+    val height: Int? = null,
     @Json(name = "width")
-    val width: Int,
+    val width: Int? = null,
     @Json(name = "url")
-    val url: String
+    val url: String? = null
 )
 
 @JsonClass(generateAdapter = true)
@@ -94,11 +94,11 @@ data class Category(
     @Json(name = "id")
     val id: Long? = null,
     @Json(name = "type")
-    val type: String,
+    val type: String? = null,
     @Json(name = "uid")
     val uid: String? = null,
     @Json(name = "guid")
-    val guid: String,
+    val guid: String? = null,
     @Json(name = "description")
     val description: String? = null,
     @Json(name = "sportId")
@@ -122,33 +122,33 @@ data class Category(
 @JsonClass(generateAdapter = true)
 data class LeagueInfo(
     @Json(name = "id")
-    val id: Int,
+    val id: Int? = null,
     @Json(name = "description")
-    val description: String,
+    val description: String? = null,
     @Json(name = "abbreviation")
     val abbreviation: String? = null,
     @Json(name = "links")
-    val links: CategoryLinks
+    val links: CategoryLinks? = null
 )
 
 @JsonClass(generateAdapter = true)
 data class TeamInfo(
     @Json(name = "id")
-    val id: Int,
+    val id: Int? = null,
     @Json(name = "description")
-    val description: String,
+    val description: String? = null,
     @Json(name = "links")
-    val links: CategoryLinks
+    val links: CategoryLinks? = null
 )
 
 @JsonClass(generateAdapter = true)
 data class AthleteInfo(
     @Json(name = "id")
-    val id: Long,
+    val id: Long? = null,
     @Json(name = "description")
-    val description: String,
+    val description: String? = null,
     @Json(name = "links")
-    val links: CategoryLinks
+    val links: CategoryLinks? = null
 )
 
 @JsonClass(generateAdapter = true)
@@ -182,7 +182,7 @@ data class MobileLinks(
 @JsonClass(generateAdapter = true)
 data class LinkHref(
     @Json(name = "href")
-    val href: String
+    val href: String? = null
 )
 
 @JsonClass(generateAdapter = true)
@@ -202,7 +202,7 @@ data class ArticleLinks(
 @JsonClass(generateAdapter = true)
 data class WebArticleLinks(
     @Json(name = "href")
-    val href: String,
+    val href: String? = null,
     @Json(name = "self")
     val self: SelfLink? = null
 )
@@ -210,7 +210,7 @@ data class WebArticleLinks(
 @JsonClass(generateAdapter = true)
 data class SelfLink(
     @Json(name = "href")
-    val href: String,
+    val href: String? = null,
     @Json(name = "dsi")
     val dsi: LinkHref? = null
 )
@@ -218,7 +218,7 @@ data class SelfLink(
 @JsonClass(generateAdapter = true)
 data class MobileArticleLink(
     @Json(name = "href")
-    val href: String
+    val href: String? = null
 )
 
 @JsonClass(generateAdapter = true)

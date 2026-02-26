@@ -61,7 +61,7 @@ fun NewsArticle(articleId: Long, onBackClick: () -> Unit) {
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .background(Color.Black.copy(alpha = 0.85f))
             .verticalScroll(rememberScrollState())
     ) {

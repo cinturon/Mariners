@@ -1,5 +1,7 @@
 package dev.jbelt.seattlemariners.di
 
+import android.R.attr.level
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,11 +14,22 @@ import dev.jbelt.seattlemariners.retrofit.APIInstance
 import dev.jbelt.seattlemariners.retrofit.EventsInstance
 import dev.jbelt.seattlemariners.retrofit.NewsInstance
 import dev.jbelt.seattlemariners.retrofit.StatsInstance
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.websocket.WebSockets
+import io.ktor.serialization.kotlinx.json.json
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    @Provides
+    @Singleton
+    fun provideMoshi(): Moshi {
+        return Moshi.Builder().build()
+    }
 
     @Provides
     @Singleton
@@ -64,6 +77,19 @@ object AppModule {
     @Singleton
     fun provideStatsService(statsInstance: StatsInstance): StatsService {
         return statsInstance.api
+    }
+
+    @Provides
+    @Singleton
+    fun provideLiveGameClient(): HttpClient {
+        return HttpClient(OkHttp) {
+            install(WebSockets) {
+                pingIntervalMillis = 10000 // Keep connection alive
+            }
+            install(ContentNegotiation) {
+                json()
+            }
+        }
     }
 }
 

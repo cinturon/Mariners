@@ -41,11 +41,12 @@ fun NewsList(articles: List<Article>, onArticleClick: (Long) -> Unit = {}) {
         contentPadding = PaddingValues(8.dp)
     ) {
         items(articles) { article ->
+            val articleId = article.id ?: 0L
             Column(
                 modifier = Modifier
                     .padding(8.dp)
                     .fillMaxWidth()
-                    .clickable { onArticleClick(article.id) },
+                    .clickable { onArticleClick(articleId) },
                 verticalArrangement = Arrangement.spacedBy(0.dp)
             ) {
                 // Image Card on top
@@ -107,26 +108,31 @@ fun NewsList(articles: List<Article>, onArticleClick: (Long) -> Unit = {}) {
                         modifier = Modifier
                             .padding(12.dp)
                     ) {
-                        Text(
-                            text = article.headline,
-                            style = MaterialTheme.typography.titleSmall,
-                            maxLines = 3,
-                            color = Color.White
-                        )
+                        article.headline?.let {
+                            Text(
+                                text = it,
+                                style = MaterialTheme.typography.titleSmall,
+                                maxLines = 3,
+                                color = Color.White
+                            )
+                        }
                         HorizontalDivider(
                             modifier = Modifier.padding(vertical = 4.dp),
                             thickness = 1.dp,
                             color = Color.White
                         )
+                        article.description?.let {
+                            Text(
+                                text = it,
+                                modifier = Modifier.padding(top = 4.dp),
+                                style = MaterialTheme.typography.bodySmall,
+                                maxLines = 5,
+                                color = Color(0xFFCCCCCC)
+                            )
+                        }
+
                         Text(
-                            text = article.description,
-                            modifier = Modifier.padding(top = 4.dp),
-                            style = MaterialTheme.typography.bodySmall,
-                            maxLines = 5,
-                            color = Color(0xFFCCCCCC)
-                        )
-                        Text(
-                            text = formatDate(article.published),
+                            text = formatDate(article.published.toString()),
                             modifier = Modifier.padding(top = 4.dp),
                             style = MaterialTheme.typography.labelSmall,
                             color = Color(0xFF999999)

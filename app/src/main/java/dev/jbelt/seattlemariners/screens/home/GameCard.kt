@@ -27,7 +27,9 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun GameCard(game: Game?) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color(0xFF1A1A1A)
@@ -42,18 +44,23 @@ fun GameCard(game: Game?) {
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            // Game Status
-            game?.status?.detailedState?.let { status ->
-                Text(
-                    text = status,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = Color(0xFF00C8C8),
-                    modifier = Modifier
-                        .background(Color(0xFF005C5C), RoundedCornerShape(4.dp))
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
-                )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                // Game Status
+                game?.status?.detailedState?.let { status ->
+                    Text(
+                        text = status,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Color(0xFF00C8C8),
+                        modifier = Modifier
+                            .background(Color(0xFF005C5C), RoundedCornerShape(4.dp))
+                            .padding(horizontal = 8.dp, vertical = 4.dp),
+                    )
+                }
             }
-
             Spacer(modifier = Modifier.height(8.dp))
 
             // Teams Row
@@ -77,14 +84,16 @@ fun GameCard(game: Game?) {
                             textAlign = TextAlign.Center
                         )
                     }
-                    Spacer(modifier = Modifier.height(4.dp))
-                    game?.teams?.away?.score?.let { score ->
-                        Text(
-                            text = score.toString(),
-                            style = MaterialTheme.typography.headlineSmall,
-                            color = Color(0xFF00C8C8),
-                            fontWeight = FontWeight.Bold
-                        )
+                    if (game?.status?.detailedState == "Final") {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        game.teams?.away?.score?.let { score ->
+                            Text(
+                                text = score.toString(),
+                                style = MaterialTheme.typography.headlineSmall,
+                                color = Color(0xFF00C8C8),
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
                 }
 
@@ -114,14 +123,16 @@ fun GameCard(game: Game?) {
                             textAlign = TextAlign.Center
                         )
                     }
-                    Spacer(modifier = Modifier.height(4.dp))
-                    game?.teams?.home?.score?.let { score ->
-                        Text(
-                            text = score.toString(),
-                            style = MaterialTheme.typography.headlineSmall,
-                            color = Color(0xFF00C8C8),
-                            fontWeight = FontWeight.Bold
-                        )
+                    if (game?.status?.detailedState == "Final") {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        game.teams?.home?.score?.let { score ->
+                            Text(
+                                text = score.toString(),
+                                style = MaterialTheme.typography.headlineSmall,
+                                color = Color(0xFF00C8C8),
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
                 }
             }
@@ -139,95 +150,104 @@ fun GameCard(game: Game?) {
             Spacer(modifier = Modifier.height(12.dp))
 
             // Game Info (Date, Time, Venue)
-            Column(
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(6.dp)
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                // Date
-                game?.officialDate?.let { date ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "📅",
-                            style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier.padding(end = 8.dp)
-                        )
-                        Text(
-                            text = date,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = Color.LightGray
-                        )
+                // Date and Time Column
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    // Date
+                    game?.officialDate?.let { date ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "📅",
+                                style = MaterialTheme.typography.bodySmall,
+                                modifier = Modifier.padding(end = 8.dp)
+                            )
+                            Text(
+                                text = date,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Color.LightGray
+                            )
+                        }
+                    }
+
+                    // Time (converted to local timezone)
+                    game?.gameDate?.let { gameDate ->
+                        val formattedTime = try {
+                            val zonedDateTime = ZonedDateTime.parse(gameDate)
+                            val localTime =
+                                zonedDateTime.withZoneSameInstant(java.time.ZoneId.systemDefault())
+                            val timeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
+                            localTime.format(timeFormatter)
+                        } catch (_: Exception) {
+                            // Fallback if parsing fails
+                            gameDate.substringAfterLast("T").substringBefore("Z")
+                        }
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "🕐",
+                                style = MaterialTheme.typography.bodySmall,
+                                modifier = Modifier.padding(end = 8.dp)
+                            )
+                            Text(
+                                text = formattedTime,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Color.LightGray
+                            )
+                        }
                     }
                 }
 
-                // Time (converted to local timezone)
-                game?.gameDate?.let { gameDate ->
-                    val formattedTime = try {
-                        val zonedDateTime = ZonedDateTime.parse(gameDate)
-                        val localTime = zonedDateTime.withZoneSameInstant(java.time.ZoneId.systemDefault())
-                        val timeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
-                        localTime.format(timeFormatter)
-                    } catch (_: Exception) {
-                        // Fallback if parsing fails
-                        gameDate.substringAfterLast("T").substringBefore("Z")
+                // Venue and Series Column
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    // Venue
+                    game?.venue?.name?.let { venueName ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "📍",
+                                style = MaterialTheme.typography.bodySmall,
+                                modifier = Modifier.padding(end = 8.dp)
+                            )
+                            Text(
+                                text = venueName,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Color.LightGray,
+                                maxLines = 1
+                            )
+                        }
                     }
 
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "🕐",
-                            style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier.padding(end = 8.dp)
-                        )
-                        Text(
-                            text = formattedTime,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = Color.LightGray
-                        )
-                    }
-                }
-
-                // Venue
-                game?.venue?.name?.let { venueName ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "📍",
-                            style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier.padding(end = 8.dp)
-                        )
-                        Text(
-                            text = venueName,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = Color.LightGray,
-                            maxLines = 1
-                        )
-                    }
-                }
-
-                // Series Description
-                game?.seriesDescription?.let { series ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "🏟️",
-                            style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier.padding(end = 8.dp)
-                        )
-                        Text(
-                            text = series,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = Color(0xFF4CAF50),
-                            fontWeight = FontWeight.SemiBold
-                        )
+                    // Series Description
+                    game?.seriesDescription?.let { series ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "🏟️",
+                                style = MaterialTheme.typography.bodySmall,
+                                modifier = Modifier.padding(end = 8.dp)
+                            )
+                            Text(
+                                text = series,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Color(0xFF4CAF50),
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
                     }
                 }
             }
